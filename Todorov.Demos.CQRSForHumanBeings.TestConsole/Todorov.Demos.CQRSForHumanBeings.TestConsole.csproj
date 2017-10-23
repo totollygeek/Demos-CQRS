@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Todorov.Demos.CQRS.Infrastructure\Todorov.Demos.CQRS.Infrastructure.csproj" />
+    <ProjectReference Include="..\Todorov.Demos.CQRS.Read\Todorov.Demos.CQRS.Read.csproj" />
+    <ProjectReference Include="..\Todorov.Demos.CQRS.Write\Todorov.Demos.CQRS.Write.csproj" />
+  </ItemGroup>
+</Project>

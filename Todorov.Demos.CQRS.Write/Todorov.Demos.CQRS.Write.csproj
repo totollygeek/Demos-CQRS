@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\Commands\" />
+    <Folder Include="Domain\Events\" />
+    <Folder Include="Domain\Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Todorov.Demos.CQRS.Infrastructure\Todorov.Demos.CQRS.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
