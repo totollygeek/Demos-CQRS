@@ -18,7 +18,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Commands
 
         public override string ToString()
         {
-            return string.Format("[CreatePetition: Id={0}, Title={1}, StartDate={2}]", Id, Title, StartDate);
+            return $"[CreatePetition: Id={Id}, Title={Title}, StartDate={StartDate}]";
         }
     }
 }

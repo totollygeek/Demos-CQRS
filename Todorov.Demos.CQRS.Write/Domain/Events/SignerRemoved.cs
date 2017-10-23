@@ -10,5 +10,10 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
         }
 
         public string Email { get; }
+
+        public override string ToString()
+        {
+            return $"[SignerRemoved: Email={Email}]";
+        }
     }
 }

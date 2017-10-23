@@ -11,5 +11,10 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
         }
 
         public DateTime FinishDate { get; }
+
+        public override string ToString()
+        {
+            return $"[PetitionFinished: FinishDate={FinishDate}]";
+        }
     }
 }

@@ -10,5 +10,10 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
         }
 
         public int NewCount { get; }
+
+        public override string ToString()
+        {
+            return $"[SignersCountChanged: NewCount={NewCount}]";
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
         private readonly Dictionary<Type, List<Delegate>> _subscribers = new Dictionary<Type, List<Delegate>>();
 
         public void Subscribe<T>(Action<T> callback)
-            where T : IEvent
+            where T : IVersionedEvent
         {
             if (_subscribers.TryGetValue(typeof(T), out List<Delegate> listeners))
             {
@@ -22,7 +22,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
         }
 
         public void Publish<T>(T @event)
-            where T : IEvent
+            where T : IVersionedEvent
         {
             if (_subscribers.TryGetValue(typeof(T), out List<Delegate> listeners))
             {

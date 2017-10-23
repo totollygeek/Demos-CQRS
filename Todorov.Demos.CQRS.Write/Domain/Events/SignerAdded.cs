@@ -18,7 +18,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
 
         public override string ToString()
         {
-            return string.Format("[SignerAdded: Email={0}, FirstName={1}, LastName={2}]", Email, FirstName, LastName);
+            return $"[SignerAdded: Email={Email}, FirstName={FirstName}, LastName={LastName}]";
         }
     }
 }

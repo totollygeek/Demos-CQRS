@@ -17,7 +17,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Commands
 
         public override string ToString()
         {
-            return string.Format("[SignPetition: Email={0}, FirstName={1}, LastName={2}]", Email, FirstName, LastName);
+            return $"[SignPetition: Email={Email}, FirstName={FirstName}, LastName={LastName}]";
         }
     }
 }

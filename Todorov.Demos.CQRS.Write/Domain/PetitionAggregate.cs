@@ -5,10 +5,10 @@ using Todorov.Demos.CQRS.Write.Domain.Events;
 
 namespace Todorov.Demos.CQRS.Write.Domain
 {
-    public class PetitionAggregate
+    public class PetitionAggregate : IAggregate
     {
-        private readonly List<IEvent> _pendingEvents = new List<IEvent>();
-        private Dictionary<Type, Action<IEvent>> _handlers = new Dictionary<Type, Action<IEvent>>();
+        private readonly List<IVersionedEvent> _pendingEvents = new List<IVersionedEvent>();
+        private Dictionary<Type, Action<IVersionedEvent>> _handlers = new Dictionary<Type, Action<IVersionedEvent>>();
 
         #region Constructors
         public PetitionAggregate(string title)
@@ -17,7 +17,7 @@ namespace Todorov.Demos.CQRS.Write.Domain
             Update(new PetitionCreated(Id, title, DateTime.UtcNow));
         }
 
-        public PetitionAggregate(Guid id, IReadOnlyList<IEvent> events)
+        public PetitionAggregate(Guid id, IReadOnlyList<IVersionedEvent> events)
             : this(id)
         {
             LoadFrom(events);
@@ -37,12 +37,12 @@ namespace Todorov.Demos.CQRS.Write.Domain
         #endregion
 
         #region Events Handling
-        private void LoadFrom(IReadOnlyList<IEvent> events)
+        private void LoadFrom(IReadOnlyList<IVersionedEvent> events)
         {
             for (var i = 0; i < events.Count; i++)
             {
                 var e = events[i];
-                if (_handlers.TryGetValue(e.GetType(), out Action<IEvent> callback))
+                if (_handlers.TryGetValue(e.GetType(), out Action<IVersionedEvent> callback))
                 {
                     callback(e);
                 }
@@ -52,12 +52,12 @@ namespace Todorov.Demos.CQRS.Write.Domain
         }
 
         private void Handle<TEvent>(Action<TEvent> callback)
-                 where TEvent : IEvent
+            where TEvent : IVersionedEvent
         {
             _handlers.Add(typeof(TEvent), @event => callback((TEvent)@event));
         }
 
-        private void Update(IEvent @event)
+        private void Update(IVersionedEvent @event)
         {
             Version = @event.UpdateFromSource(Id, Version);
             _pendingEvents.Add(@event);
@@ -67,7 +67,7 @@ namespace Todorov.Demos.CQRS.Write.Domain
         #region State
         public Guid Id { get; }
         public int Version { get; private set; }
-        public IReadOnlyList<IEvent> PendingEvents => _pendingEvents;
+        public IReadOnlyList<IVersionedEvent> PendingEvents => _pendingEvents;
 
         public AggregateState State { get; private set; }
         public string Title { get; private set; }

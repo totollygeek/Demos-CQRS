@@ -13,7 +13,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Commands
 
         public override string ToString()
         {
-            return string.Format("[RevokeSign: Email={0}]", Email);
+            return $"[RevokeSign: Email={Email}]";
         }
     }
 }

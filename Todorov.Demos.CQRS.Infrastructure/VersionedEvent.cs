@@ -3,7 +3,7 @@ using Todorov.Demos.CQRS.Infrastructure.Interfaces;
 
 namespace Todorov.Demos.CQRS.Infrastructure
 {
-    public abstract class VersionedEvent : IEvent
+    public abstract class VersionedEvent : IVersionedEvent
     {
         protected VersionedEvent()
         {
@@ -18,5 +18,6 @@ namespace Todorov.Demos.CQRS.Infrastructure
 
         public Guid SourceId { get; private set; }
         public int Version { get; private set; }
+        public string Payload => ToString();
     }
 }

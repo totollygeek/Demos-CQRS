@@ -11,5 +11,10 @@ namespace Todorov.Demos.CQRS.Write.Domain.Commands
         }
 
         public Guid Id { get; }
+
+        public override string ToString()
+        {
+            return $"[ClosePetition: Id={Id}]";
+        }
     }
 }
