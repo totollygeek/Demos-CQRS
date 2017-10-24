@@ -5,16 +5,16 @@ namespace Todorov.Demos.CQRS.Write.Domain.Commands
 {
     public class ClosePetition : ICommand
     {
-        public ClosePetition(Guid id)
+        public ClosePetition(Guid aggregateId)
         {
-            Id = id;
+            AggregateId = aggregateId;
         }
 
-        public Guid Id { get; }
+        public Guid AggregateId { get; }
 
         public override string ToString()
         {
-            return $"[ClosePetition: Id={Id}]";
+            return $"[ClosePetition: Id={AggregateId}]";
         }
     }
 }

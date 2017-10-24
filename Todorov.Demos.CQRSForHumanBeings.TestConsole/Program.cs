@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Todorov.Demos.CQRSForHumanBeings.TestConsole
+namespace Todorov.Demos.CQRS.TestConsole
 {
     class Program
     {

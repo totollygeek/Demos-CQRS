@@ -7,12 +7,14 @@ using Todorov.Demos.CQRS.Infrastructure.Interfaces;
 namespace Todorov.Demos.CQRS.Infrastructure
 {
     public class InMemoryEventSourceRepository<TAggregate> : IEventSourceRepository<TAggregate>
-        where TAggregate : IAggregate
+        where TAggregate : class, IAggregate
     {
         private static readonly Dictionary<Guid, List<IVersionedEvent>> _events = new Dictionary<Guid, List<IVersionedEvent>>();
 
+        private readonly IEventBus _eventBus;
         private readonly Action<string[]> _addEventsCallback;
         private static readonly Func<Guid, IReadOnlyList<IVersionedEvent>, TAggregate> AggregateFactory;
+
         static InMemoryEventSourceRepository()
         {
             var constructor = typeof(TAggregate).GetConstructor(new[] { typeof(Guid), typeof(IReadOnlyList<IVersionedEvent>) });
@@ -27,7 +29,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
             AggregateFactory = expression.Compile();
         }
 
-        public InMemoryEventSourceRepository(Action<string[]> addEventsCallback)
+        public InMemoryEventSourceRepository(IEventBus eventBus, Action<string[]> addEventsCallback)
         {
             _addEventsCallback = addEventsCallback;
         }
@@ -41,7 +43,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
                 return AggregateFactory(id, ordered);
             }
 
-            throw new InvalidOperationException($"No events found for aggregate with id {id}");
+            return null;
         }
 
         public void Save(TAggregate aggregate)
@@ -60,6 +62,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
             {
                 dbEvents.Add(@event);
                 output.Add(@event.ToString());
+                _eventBus.Publish(@event);
             }
 
             _addEventsCallback(output.ToArray());

@@ -11,10 +11,10 @@ namespace Todorov.Demos.CQRS.Write.Domain
         private Dictionary<Type, Action<IVersionedEvent>> _handlers = new Dictionary<Type, Action<IVersionedEvent>>();
 
         #region Constructors
-        public PetitionAggregate(string title)
-            : this(Guid.NewGuid())
+        public PetitionAggregate(Guid id, string title, DateTime startDate)
+            : this(id)
         {
-            Update(new PetitionCreated(Id, title, DateTime.UtcNow));
+            Update(new PetitionCreated(id, title, startDate));
         }
 
         public PetitionAggregate(Guid id, IReadOnlyList<IVersionedEvent> events)

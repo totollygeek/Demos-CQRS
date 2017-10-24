@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todorov.Demos.CQRSForHumanBeings.TestConsole", "Todorov.Demos.CQRSForHumanBeings.TestConsole\Todorov.Demos.CQRSForHumanBeings.TestConsole.csproj", "{8F910D0C-8B0E-46C6-8EF9-2AACD69287E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todorov.Demos.CQRS.TestConsole", "Todorov.Demos.CQRSForHumanBeings.TestConsole\Todorov.Demos.CQRS.TestConsole.csproj", "{8F910D0C-8B0E-46C6-8EF9-2AACD69287E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todorov.Demos.CQRS.Read", "Todorov.Demos.CQRS.Read\Todorov.Demos.CQRS.Read.csproj", "{D2B98271-4F4D-4BFB-8D52-1976EB37CC0B}"
 EndProject
