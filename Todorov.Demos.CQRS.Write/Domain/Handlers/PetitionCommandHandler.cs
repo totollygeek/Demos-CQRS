@@ -35,12 +35,16 @@ namespace Todorov.Demos.CQRS.Write.Domain.Handlers
 
         public void Handle(RevokeSign command)
         {
-            
+            var aggregate = GetAggregate(command.AggregateId);
+            aggregate.RemoveSigner(command.Email);
+            _repository.Save(aggregate);
         }
 
         public void Handle(ClosePetition command)
         {
-            
+            var aggregate = GetAggregate(command.AggregateId);
+            aggregate.ClosePetition(command.StopDate);
+            _repository.Save(aggregate);
         }
 
         private PetitionAggregate GetAggregate(Guid id)

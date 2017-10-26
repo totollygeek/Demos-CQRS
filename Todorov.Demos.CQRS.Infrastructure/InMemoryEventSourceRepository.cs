@@ -31,6 +31,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
 
         public InMemoryEventSourceRepository(IEventBus eventBus, Action<string[]> addEventsCallback)
         {
+            _eventBus = eventBus;
             _addEventsCallback = addEventsCallback;
         }
 

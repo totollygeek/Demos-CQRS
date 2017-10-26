@@ -14,7 +14,7 @@ namespace Todorov.Demos.CQRS.Write.Domain
         public PetitionAggregate(Guid id, string title, DateTime startDate)
             : this(id)
         {
-            Update(new PetitionCreated(id, title, startDate));
+            Update(new PetitionCreated(title, startDate));
         }
 
         public PetitionAggregate(Guid id, IReadOnlyList<IVersionedEvent> events)
@@ -73,7 +73,7 @@ namespace Todorov.Demos.CQRS.Write.Domain
         public string Title { get; private set; }
         public DateTime? StartDate { get; private set; }
         public int SignedCount { get; private set; }
-        public List<string> Signers { get; private set; }
+        public List<string> Signers { get; private set; } = new List<string>();
         public DateTime? FinishDate { get; private set; }
         #endregion       
 
@@ -123,9 +123,9 @@ namespace Todorov.Demos.CQRS.Write.Domain
             Update(new SignersCountChanged(Signers.Count - 1));
         }
 
-        public void ClosePetition()
+        public void ClosePetition(DateTime stopDate)
         {
-            Update(new PetitionFinished(DateTime.UtcNow));
+            Update(new PetitionFinished(stopDate));
         }
         #endregion
     }

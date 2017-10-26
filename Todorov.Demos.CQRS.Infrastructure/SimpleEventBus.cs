@@ -24,10 +24,10 @@ namespace Todorov.Demos.CQRS.Infrastructure
         public void Publish<T>(T @event)
             where T : IVersionedEvent
         {
-            if (_subscribers.TryGetValue(typeof(T), out List<Delegate> listeners))
+            if (_subscribers.TryGetValue(@event.GetType(), out List<Delegate> listeners))
             {
-                foreach (Action<T> callback in listeners)
-                    callback(@event);
+                foreach (var callback in listeners)
+                    callback.DynamicInvoke(@event);
             }
         }
     }
