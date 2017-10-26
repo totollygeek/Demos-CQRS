@@ -94,6 +94,7 @@ namespace Todorov.Demos.CQRS.TestConsole
                 Console.WriteLine($"Started: {petition.StartDate}");
                 var ended = petition.EndDate.HasValue ? petition.EndDate.Value.ToString() : "Not ended yet";
                 Console.WriteLine($"Ended: {ended}");
+                Console.WriteLine($"Status: {petition.State}");
                 Console.WriteLine($"Signers: {petition.SignersCount}");
                 Console.WriteLine("================ Signers ================");
 

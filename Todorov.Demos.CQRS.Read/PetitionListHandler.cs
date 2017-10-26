@@ -24,7 +24,8 @@ namespace Todorov.Demos.CQRS.Read
             {
                 Id = @event.SourceId,
                 Title = @event.Title,
-                StartDate = @event.StartDate
+                StartDate = @event.StartDate,
+                State = PetitionState.Running
             };
 
             _modelStore.Save(model);
@@ -34,6 +35,7 @@ namespace Todorov.Demos.CQRS.Read
         {
             var model = _modelStore.Get(@event.SourceId);
             model.EndDate = @event.FinishDate;
+            model.State = PetitionState.Finished;
             _modelStore.Save(model);
         }
 

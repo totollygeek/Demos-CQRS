@@ -23,11 +23,18 @@ namespace Todorov.Demos.CQRS.Read.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int SignersCount { get; set; }
+        public PetitionState State { get; set; }
         public Dictionary<string, PetitionSigner> Signers { get; set; } = new Dictionary<string, PetitionSigner>();
 
         public override string ToString()
         {
             return $"[PetitionModel: Id={Id}, Title={Title}, StartDate={StartDate}, EndDate={EndDate}]";
         }
+    }
+
+    public enum PetitionState
+    {
+        Running,
+        Finished
     }
 }
