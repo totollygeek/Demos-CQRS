@@ -14,7 +14,9 @@ namespace Todorov.Demos.CQRS.Read.Models
                 Title = model.Title,
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
-                Signers = new Dictionary<string, PetitionSigner>(model.Signers)
+                Signers = new Dictionary<string, PetitionSigner>(model.Signers),
+                State = model.State,
+                SignersCount = model.SignersCount
             };
         }
 
