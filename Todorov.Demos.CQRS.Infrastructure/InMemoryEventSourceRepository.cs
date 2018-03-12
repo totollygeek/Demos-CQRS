@@ -12,7 +12,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
         private static readonly Dictionary<Guid, List<IVersionedEvent>> _events = new Dictionary<Guid, List<IVersionedEvent>>();
 
         private readonly IEventBus _eventBus;
-        private readonly Action<string[]> _addEventsCallback;
+        private readonly Action<IVersionedEvent[]> _addEventsCallback;
         private static readonly Func<Guid, IReadOnlyList<IVersionedEvent>, TAggregate> AggregateFactory;
 
         static InMemoryEventSourceRepository()
@@ -29,7 +29,7 @@ namespace Todorov.Demos.CQRS.Infrastructure
             AggregateFactory = expression.Compile();
         }
 
-        public InMemoryEventSourceRepository(IEventBus eventBus, Action<string[]> addEventsCallback)
+        public InMemoryEventSourceRepository(IEventBus eventBus, Action<IVersionedEvent[]> addEventsCallback)
         {
             _eventBus = eventBus;
             _addEventsCallback = addEventsCallback;
@@ -58,15 +58,14 @@ namespace Todorov.Demos.CQRS.Infrastructure
                 _events.Add(aggregate.Id, dbEvents);
             }
 
-            var output = new List<string>();
+
             foreach (var @event in aggregate.PendingEvents)
             {
                 dbEvents.Add(@event);
-                output.Add(@event.ToString());
                 _eventBus.Publish(@event);
             }
 
-            _addEventsCallback(output.ToArray());
+            _addEventsCallback(aggregate.PendingEvents.ToArray());
         }
     }
 }

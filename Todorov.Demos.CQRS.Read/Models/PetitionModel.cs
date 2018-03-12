@@ -5,7 +5,7 @@ using Todorov.Demos.CQRS.Infrastructure.Interfaces;
 namespace Todorov.Demos.CQRS.Read.Models
 {
     public class PetitionModel : IReadModel
-    {
+    {		
         public static PetitionModel Clone(PetitionModel model)
         {
             return new PetitionModel()
@@ -18,7 +18,7 @@ namespace Todorov.Demos.CQRS.Read.Models
                 State = model.State,
                 SignersCount = model.SignersCount
             };
-        }
+        }		
 
         public Guid Id { get; set; }
         public string Title { get; set; }

@@ -14,7 +14,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
 
         public override string ToString()
         {
-            return $"[PetitionFinished: FinishDate={FinishDate}]";
+            return $"({SourceId})[PetitionFinished: FinishDate={FinishDate}]";
         }
     }
 }

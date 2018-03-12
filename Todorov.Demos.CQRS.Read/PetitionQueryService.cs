@@ -14,6 +14,6 @@ namespace Todorov.Demos.CQRS.Read
         public PetitionModel[] GetAll()
         {
             return _modelStore.GetAll();
-        }
+        }		
     }
 }

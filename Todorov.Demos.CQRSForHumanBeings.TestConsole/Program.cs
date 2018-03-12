@@ -14,9 +14,20 @@ namespace Todorov.Demos.CQRS.TestConsole
     class Program
     {
         #region Private members
-        private static List<string> _eventsQueue = new List<string>();
+        private static List<IVersionedEvent> _eventsQueue = new List<IVersionedEvent>();
 
-        private static IEventBus _eventBus = new SimpleEventBus();
+		private static ConsoleColor[] PetitionColors { get; } =
+		{
+			ConsoleColor.Cyan,
+			ConsoleColor.Green,
+			ConsoleColor.Magenta
+		};
+
+		private static int CurrentColor { get; set; } = 0;
+
+		private static Dictionary<Guid, ConsoleColor> ColorMap { get; } = new Dictionary<Guid, ConsoleColor>();
+
+		private static IEventBus _eventBus = new SimpleEventBus();
         private static ICommandBus _commandBus = new SimpleCommandBus();
 
         private static IEventSourceRepository<PetitionAggregate> _eventSourceRepository =
@@ -98,12 +109,16 @@ namespace Todorov.Demos.CQRS.TestConsole
                 Console.WriteLine($"Signers: {petition.SignersCount}");
                 Console.WriteLine("================ Signers ================");
 
-                var idx = 1;
-                foreach(var signer in petition.Signers)
-                {
-                    Console.WriteLine($"{idx}) {signer.Value.FirstName} {signer.Value.LastName} ({signer.Value.Email})");
-                    idx++;
-                }
+				if (petition.Signers.Count == 0) Console.WriteLine("No signers yet!");
+				else
+				{
+					var idx = 1;
+					foreach (var signer in petition.Signers)
+					{
+						Console.WriteLine($"{idx}) {signer.Value.FirstName} {signer.Value.LastName} ({signer.Value.Email})");
+						idx++;
+					}
+				}
 
                 Console.WriteLine("=========================================");
             } 
@@ -168,12 +183,28 @@ namespace Todorov.Demos.CQRS.TestConsole
 
             for (var i = 0; i < _eventsQueue.Count; i++)
             {
+				Console.ForegroundColor = GetEventsColor(_eventsQueue[i].SourceId);
                 Console.WriteLine($"{i + 1} {_eventsQueue[i]}");
+				Console.ResetColor();
             }
 
             Console.WriteLine("Press any key to return to the menu...");
             Console.ReadKey();
         }
+
+		private static ConsoleColor GetEventsColor(Guid id)
+		{
+			if (ColorMap.TryGetValue(id, out var color))
+				return color;
+
+			color = PetitionColors[CurrentColor];
+			ColorMap.Add(id, color);
+
+			if (CurrentColor == PetitionColors.Length - 1) CurrentColor = 0;
+			else CurrentColor++;
+
+			return color;
+		}
 
         private static void ShowMenu()
         {
