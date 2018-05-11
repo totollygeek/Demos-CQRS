@@ -13,7 +13,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
 
         public override string ToString()
         {
-            return $"({SourceId})[SignersCountChanged: NewCount={NewCount}]";
+            return $"({SourceId})\n\t[SignersCountChanged] \n\t\tNewCount={NewCount}";
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Todorov.Demos.CQRS.Write.Domain.Events
 
         public override string ToString()
         {
-            return $"({SourceId})[SignerRemoved: Email={Email}]";
+            return $"({SourceId})\n\t[SignerRemoved] \n\t\tEmail={Email}";
         }
     }
 }

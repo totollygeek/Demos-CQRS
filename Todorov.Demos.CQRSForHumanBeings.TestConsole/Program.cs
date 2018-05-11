@@ -184,7 +184,7 @@ namespace Todorov.Demos.CQRS.TestConsole
             for (var i = 0; i < _eventsQueue.Count; i++)
             {
 				Console.ForegroundColor = GetEventsColor(_eventsQueue[i].SourceId);
-                Console.WriteLine($"{i + 1} {_eventsQueue[i]}");
+                Console.WriteLine($"[{i + 1}] {_eventsQueue[i]}");
 				Console.ResetColor();
             }
 
