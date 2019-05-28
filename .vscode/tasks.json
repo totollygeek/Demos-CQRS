@@ -1,15 +1,15 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Todorov.Demos.CQRSForHumanBeings.TestConsole/Todorov.Demos.CQRS.TestConsole.csproj"
-            ],
-            "problemMatcher": "$msCompile"
-        }
-    ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/Todorov.Demos.CQRSForHumanBeings.sln"
+			],
+			"problemMatcher": "$msCompile"
+		}
+	]
 }
