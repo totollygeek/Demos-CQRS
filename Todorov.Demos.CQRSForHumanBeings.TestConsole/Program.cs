@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Spectre.Console;
 using Todorov.Demos.CQRS.Infrastructure;
 using Todorov.Demos.CQRS.Infrastructure.Interfaces;
 using Todorov.Demos.CQRS.Read;
@@ -14,7 +15,7 @@ namespace Todorov.Demos.CQRS.TestConsole
     class Program
     {
         #region Private members
-        private static List<IVersionedEvent> _eventsQueue = new List<IVersionedEvent>();
+        private static List<IVersionedEvent> _eventsQueue = new();
 
 		private static ConsoleColor[] PetitionColors { get; } =
 		{
@@ -25,58 +26,43 @@ namespace Todorov.Demos.CQRS.TestConsole
 
 		private static int CurrentColor { get; set; } = 0;
 
-		private static Dictionary<Guid, ConsoleColor> ColorMap { get; } = new Dictionary<Guid, ConsoleColor>();
+		private static Dictionary<Guid, ConsoleColor> ColorMap { get; } = new();
 
-		private static IEventBus _eventBus = new SimpleEventBus();
-        private static ICommandBus _commandBus = new SimpleCommandBus();
+		private static readonly IEventBus _eventBus = new SimpleEventBus();
+        private static readonly ICommandBus _commandBus = new SimpleCommandBus();
 
-        private static IEventSourceRepository<PetitionAggregate> _eventSourceRepository =
+        private static readonly IEventSourceRepository<PetitionAggregate> _eventSourceRepository =
             new InMemoryEventSourceRepository<PetitionAggregate>(_eventBus, events => _eventsQueue.AddRange(events));
-        private static IReadModelStore<PetitionModel> _readModelStore =
+        private static readonly IReadModelStore<PetitionModel> _readModelStore =
             new InMemoryReadModelStore();
 
-        private static PetitionCommandHandler _commandHandler = new PetitionCommandHandler(_eventSourceRepository);
+        private static readonly PetitionCommandHandler _commandHandler = new(_eventSourceRepository);
         private static PetitionListHandler _petitionListHandler = new PetitionListHandler(_eventBus, _readModelStore);
 
-        private static PetitionService _service = new PetitionService(_commandBus);
-        private static PetitionQueryService _queryService = new PetitionQueryService(_readModelStore);
+        private static readonly PetitionService _service = new(_commandBus);
+        private static readonly PetitionQueryService _queryService = new(_readModelStore);
         #endregion
 
-        static void Main(string[] args)
+        static void Main()
         {
             Initialize();
 
-            var choice = "";
-            while(choice != "9")
+            while(true)
             {
-                ShowMenu();
-                choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        CreatePetition();
-                        break;
-                    case "2":
-                        ViewPetitions();
-                        break;
-                    case "3":
-                        SignPetition();
-                        break;
-                    case "4":
-                        RevokeSign();
-                        break;
-                    case "5":
-                        ClosePetition();
-                        break;
-                    case "6":
-                        ViewEvents();
-                        break;
-                }
+                var selectedItem = ShowMenu();
+                selectedItem.Item2();
+                Console.WriteLine("Press any key to return to the menu...");
+                Console.ReadKey();
             }
+        }
+
+        private static void Exit()
+        {
             Console.WriteLine();
             Console.Write("Bye Bye!");
+            Environment.Exit(0);
         }
+        
 
         private static void CreatePetition()
         {
@@ -87,8 +73,6 @@ namespace Todorov.Demos.CQRS.TestConsole
             _service.CreatePetition(title);
 
             Console.WriteLine("Petition created!");
-            Console.WriteLine("Press any key to return to the menu...");
-            Console.ReadKey();
         }
 
         private static void ViewPetitions()
@@ -122,9 +106,6 @@ namespace Todorov.Demos.CQRS.TestConsole
 
                 Console.WriteLine("=========================================");
             } 
-
-            Console.WriteLine("Press any key to return to the menu...");
-            Console.ReadKey();
         }
 
         private static void SignPetition()
@@ -145,8 +126,6 @@ namespace Todorov.Demos.CQRS.TestConsole
             _service.SignPetition(petitionGuid, email, firstName, lastName);
 
             Console.WriteLine("Petition signed!");
-            Console.WriteLine("Press any key to return to the menu...");
-            Console.ReadKey();
         }
 
         private static void RevokeSign()
@@ -161,8 +140,6 @@ namespace Todorov.Demos.CQRS.TestConsole
             _service.RevokeSign(petitionGuid, email);
 
             Console.WriteLine("Petition sign revoked!");
-            Console.WriteLine("Press any key to return to the menu...");
-            Console.ReadKey();
         }
 
         private static void ClosePetition()
@@ -173,8 +150,6 @@ namespace Todorov.Demos.CQRS.TestConsole
             _service.ClosePetition(petitionGuid);
 
             Console.WriteLine("Petition closed!");
-            Console.WriteLine("Press any key to return to the menu...");
-            Console.ReadKey();
         }
 
         private static void ViewEvents()
@@ -187,9 +162,6 @@ namespace Todorov.Demos.CQRS.TestConsole
                 Console.WriteLine($"[{i + 1}] {_eventsQueue[i]}");
 				Console.ResetColor();
             }
-
-            Console.WriteLine("Press any key to return to the menu...");
-            Console.ReadKey();
         }
 
 		private static ConsoleColor GetEventsColor(Guid id)
@@ -206,29 +178,35 @@ namespace Todorov.Demos.CQRS.TestConsole
 			return color;
 		}
 
-        private static void ShowMenu()
+        private static Tuple<string, Action> ShowMenu()
         {
-            Console.Clear();           
-            Console.WriteLine("1) Create Petition");
-            Console.WriteLine("2) View all petitions");
-            Console.WriteLine("3) Sign petition");
-            Console.WriteLine("4) Revoke sign");
-            Console.WriteLine("5) Close petition");
-            Console.WriteLine("6) View events");
-            Console.WriteLine();
-            Console.WriteLine("9) Exit");
-            Console.Write("Choose an option from the menu: ");
+            AnsiConsole.Clear();
+            return AnsiConsole.Prompt(
+                new SelectionPrompt<Tuple<string, Action>>()
+                    .Title("Choose what you want to do:")
+                    .PageSize(10)
+                    .AddChoices(
+                        new Tuple<string, Action>("Create Petition", CreatePetition),
+                        new Tuple<string, Action>("View all petitions", ViewPetitions),
+                        new Tuple<string, Action>("Sign petition", SignPetition),
+                        new Tuple<string, Action>("Revoke sign", RevokeSign),
+                        new Tuple<string, Action>("Close petition", ClosePetition),
+                        new Tuple<string, Action>("View events", ViewEvents),
+                        new Tuple<string, Action>("Exit", Exit))
+                    .UseConverter(s => s.Item1));
         }
 
         private static Guid GetPetitionGuid()
         {
-            Console.Write("Choose petition: ");
-            var petitionId = int.Parse(Console.ReadLine());
-
             var petitions = _queryService.GetAll();
+            var selectedPetition = AnsiConsole.Prompt(
+                new SelectionPrompt<PetitionModel>()
+                    .Title("Choose petition:")
+                    .PageSize(10)
+                    .AddChoices(petitions)
+                    .UseConverter(s => s.Title));
 
-            var petitionGuid = petitions[petitionId - 1].Id;
-            return petitionGuid;
+            return selectedPetition.Id;
         }
 
         private static void Initialize()
